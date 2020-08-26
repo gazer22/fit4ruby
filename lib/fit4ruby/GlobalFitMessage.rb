@@ -117,6 +117,9 @@ module Fit4Ruby
           end
         end
 
+        if value.is_a?(Array)
+            value = value[0]     #jkk does this work?
+        end
         value += @opts[:offset] if @opts[:offset]
         value = (value * @opts[:scale].to_f).to_i if @opts[:scale]
 

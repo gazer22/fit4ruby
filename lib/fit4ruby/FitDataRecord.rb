@@ -149,10 +149,17 @@ module Fit4Ruby
           # we write the 'undefined' value instead.
           value = FitDefinitionFieldBase.undefined_value(field.type)
         end
-		if !value.is_a?(Numeric)
-			binding.pry    #jkk
+		if value.is_a?(Array)
+			#binding.pry    #jkk
+            value.map do |v|
+                v = FitDefinitionFieldBase.undefined_value(field.type) if v.nil?
+            end
 		end
-		puts "#{field.name}: #{value}"   #jkk
+		#puts "#{field.name}: #{value}"   #jkk
+        if value.nil?
+            #binding.pry     #jkk
+            value = FitDefinitionFieldBase.undefined_value(field.type)
+        end
         bd[field.name] = value
       end
 
