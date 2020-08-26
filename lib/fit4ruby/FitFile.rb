@@ -80,8 +80,8 @@ module Fit4Ruby
       ensure
         io.close
       end
-
-      entities[0].top_level_record
+	  
+      return entities[0].top_level_record
     end
 
     def write(file_name, top_level_record)
@@ -99,6 +99,8 @@ module Fit4Ruby
         # Move the pointer behind the header section.
         io.seek(start_pos)
         id_mapper = FitMessageIdMapper.new
+		
+		
         top_level_record.write(io, id_mapper)
         end_pos = io.pos
 

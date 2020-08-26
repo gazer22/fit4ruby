@@ -24,6 +24,7 @@ module Fit4Ruby
     # Ensure that FitDataRecords have a deterministic sequence. Sensor
     # settings are sorted by message_index.
     def <=>(fdr)
+	  puts "#{@timestamp} <=> #{fdr.timestamp}; #{@message.name} vs. #{fdr.message.name}"
       @timestamp == fdr.timestamp ?
         @message.name == fdr.message.name ?
           @message_index <=> fdr.message_index :

@@ -309,12 +309,15 @@ module Fit4Ruby
       @file_id.write(io, id_mapper)
       @file_creator.write(io, id_mapper)
 
-      (@field_descriptions + @developer_data_ids +
-       @device_infos + @sensor_settings +
-       @data_sources + @user_profiles +
-       @physiological_metrics + @events +
-       @sessions + @laps + @records + @lengths +
-       @heart_rate_zones + @personal_records).sort.each do |s|
+	  combined =  (@field_descriptions + @developer_data_ids + 
+				   @device_infos + @sensor_settings + 
+				   @data_sources + @user_profiles + 
+				   @physiological_metrics + @events + 
+				   @sessions + @laps + @records + 
+				   @lengths + @heart_rate_zones + 
+				   @personal_records)
+	  cleaned = combined.select { |x| x.class.method_defined?("timestamp") }
+      cleaned.sort.each do |s|
         s.write(io, id_mapper)
       end
       super

@@ -22,7 +22,7 @@ module Fit4Ruby
     RecordOrder = [ 'user_data', 'user_profile',
                     'device_info', 'data_sources', 'event',
                     'record', 'lap', 'length', 'session', 'heart_rate_zones',
-                    'personal_records' ]
+                    'physiological_metrics', 'personal_records' ]
 
     attr_reader :message
 
@@ -97,7 +97,7 @@ module Fit4Ruby
     end
 
     def <=>(fdr)
-      @timestamp == fdr.timestamp ?
+	  @timestamp == fdr.timestamp ?
         RecordOrder.index(@message.name) <=>
         RecordOrder.index(fdr.message.name) :
         @timestamp <=> fdr.timestamp
@@ -149,6 +149,10 @@ module Fit4Ruby
           # we write the 'undefined' value instead.
           value = FitDefinitionFieldBase.undefined_value(field.type)
         end
+		if !value.is_a?(Numeric)
+			binding.pry    #jkk
+		end
+		puts "#{field.name}: #{value}"   #jkk
         bd[field.name] = value
       end
 
