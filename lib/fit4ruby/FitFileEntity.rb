@@ -11,6 +11,7 @@
 #
 
 require 'fit4ruby/Activity'
+require 'Course'
 require 'fit4ruby/Monitoring_B'
 require 'fit4ruby/GlobalFitMessage'
 require 'fit4ruby/Metrics'
@@ -47,6 +48,9 @@ module Fit4Ruby
       when 4, 'activity'
         @top_level_record = Activity.new
         @type = 'activity'
+	  when 6, 'course'
+	    @top_level_record = Course.new      #jkk doesn't exist yet
+		@type = 'course'					#jkk doesn't exist yet
       when 32, 'monitoring_b'
         @top_level_record = Monitoring_B.new
         @type = 'monitoring_b'
