@@ -99,10 +99,13 @@ module Fit4Ruby
 	  @sport = 'cycling'
 	  @sub_sport = 'road'
 	  @timestamp = @cur_session_laps[0].timestamp
-	  binding.pry    #jkk
-	  for index in 0...@cur_session_laps.length
-		@sessions[index] = Session.new(@cur_session_laps[index],index,{})
-	  end		
+
+      @sessions[0] = Session.new(@cur_session_laps,0,{
+        "start_time" => @timestamp,
+        "total_distance" => total_distance,
+        "total_timer_time" => total_timer_time,
+        "total_elapsed_time" => total_timer_time,
+        "avg_speed" => avg_speed })
 	  @num_sessions = @sessions.count
 	  
 	  #removed checks for @total_timer_time, @sensor_settings
@@ -179,7 +182,7 @@ module Fit4Ruby
         @heart_rate_zones[index].check(index) if @heart_rate_zones[index]
       end
 
-      @sessions.each.with_index { |s, index| s.check(index, self) }
+      @sessions.each { |s| s.check(self) }
     end
 
     # Convenience method that aggregates all the distances from the included
