@@ -105,7 +105,8 @@ module Fit4Ruby
         "total_distance" => total_distance,
         "total_timer_time" => total_timer_time,
         "total_elapsed_time" => total_timer_time,
-        "avg_speed" => avg_speed })
+        "avg_speed" => avg_speed,
+        "timestamp" => @timestamp })
 	  @num_sessions = @sessions.count
 	  
 	  #removed checks for @total_timer_time, @sensor_settings
