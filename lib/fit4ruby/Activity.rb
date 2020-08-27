@@ -91,6 +91,11 @@ module Fit4Ruby
       unless @timestamp && @timestamp >= Time.parse('1990-01-01T00:00:00+00:00')
         Log.fatal "Activity has no valid timestamp"
       end
+	  
+	  unless @local_timestamp && @local_timestamp >= Time.parse('1990-01-01T00:00:00+00:00')
+	    Log.fatal "Activity has no valid local timestamp"
+	  end
+	  
       unless @total_timer_time
         Log.fatal "Activity has no valid total_timer_time"
       end

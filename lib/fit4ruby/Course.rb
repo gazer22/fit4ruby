@@ -42,7 +42,7 @@ module Fit4Ruby
                   :file_creator, :device_infos, :sensor_settings, :data_sources,
                   :user_data, :user_profiles, :physiological_metrics,
                   :sessions, :laps, :records, :lengths, :hrv,
-                  :heart_rate_zones, :events, :personal_records
+                  :heart_rate_zones, :events, :personal_records, :local_timestamp
 
     # Create a new Course object.
     # @param field_values [Hash] A Hash that provides initial values for
@@ -99,7 +99,8 @@ module Fit4Ruby
 	  @sport = 'cycling'
 	  @sub_sport = 'road'
 	  @timestamp = @cur_session_laps[0].timestamp
-
+	  @local_timestamp = @timestamp
+	  
       @sessions[0] = Session.new(@cur_session_laps,0,{
         "start_time" => @timestamp,
         "total_distance" => total_distance,
