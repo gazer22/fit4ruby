@@ -51,13 +51,19 @@ module Fit4Ruby
       super('course')
       @meta_field_units['total_gps_distance'] = 'm'
       @num_sessions = 0
+	  
+	  @sport = 'cycling'		# Course files default to road cycling
+	  @sub_sport = 'road'
 
       @file_id = FileId.new
       @field_descriptions = []
       @developer_data_ids = []
       @epo_data = nil
       @file_creator = FileCreator.new
-      @device_infos = []
+      @device_infos = [ DeviceInfo.new( {"manufacturer" => 'development', 
+		"serial_number" => 1234567890,
+		"product" => 'generic',
+		"device_index" => 0 }) ]
       @sensor_settings = []
       @data_sources = []
       @user_data = []
@@ -88,20 +94,31 @@ module Fit4Ruby
     # Perform some basic logical checks on the object and all references sub
     # objects. Any errors will be reported via the Log object.
     def check
+	  
+	  # override some things to act more like an activity
+	  @sport = 'cycling'
+	  @sub_sport = 'road'
+	  @timestamp = @cur_session_laps[0].timestamp
+	  binding.pry    #jkk
+	  for index in 0...@cur_session_laps.length
+		@sessions[index] = Session.new(@cur_session_laps[index],index,{})
+	  end		
+	  @num_sessions = @sessions.count
+	  
+	  #removed checks for @total_timer_time, @sensor_settings
+
+      unless @device_infos.length > 0
+        Log.fatal "Activity must have at least one device_info section"
+      end
+      @device_infos.each.with_index { |d, index| d.check(index) }
+
       unless @timestamp && @timestamp >= Time.parse('1990-01-01T00:00:00+00:00')
         Log.fatal "Course has no valid timestamp"
       end
-      unless @total_timer_time
-        Log.fatal "Course has no valid total_timer_time"
-      end
-      unless @device_infos.length > 0
-        Log.fatal "Course must have at least one device_info section"
-      end
-      @device_infos.each.with_index { |d, index| d.check(index) }
-      @sensor_settings.each.with_index { |s, index| s.check(index) }
+
       unless @num_sessions == @sessions.count
-        Log.fatal "Course record requires #{@num_sessions}, but "
-                  "#{@sessions.length} session records were found in the "
+        Log.fatal "Course record requires #{@num_sessions}, but "  + 
+                  "#{@sessions.length} session records were found in the " + 
                   "FIT file."
       end
 
@@ -162,16 +179,26 @@ module Fit4Ruby
         @heart_rate_zones[index].check(index) if @heart_rate_zones[index]
       end
 
-      @sessions.each { |s| s.check(self) }
+      @sessions.each.with_index { |s, index| s.check(index, self) }
     end
 
     # Convenience method that aggregates all the distances from the included
     # sessions.
     def total_distance
       d = 0.0
-      @sessions.each { |s| d += s.total_distance }
-      d
+      @cur_session_laps.each { |s| d += s.total_distance }
+      return d
     end
+	
+	def total_timer_time
+	  t = 0.0
+	  @cur_session_laps.each { |s| t += s.total_timer_time }
+	  return t
+	end
+	
+	def timestamp
+	  return @timestamp
+	end
 
     # Total distance convered by this Course purely computed by the GPS
     # coordinates. This may differ from the distance computed by the device as
@@ -233,12 +260,12 @@ module Fit4Ruby
     # Convenience method that averages the speed over all sessions.
     def avg_speed
       speed = 0.0
-      @sessions.each do |s|
+      @cur_session_laps.each do |s|
         if (spd = s.avg_speed || s.enhanced_avg_speed)
           speed += spd
         end
       end
-      speed / @sessions.length
+      speed /  @cur_session_laps.length
     end
 
     # Return the heart rate when the Course recording was last stopped.
@@ -293,12 +320,12 @@ module Fit4Ruby
 
     # Returns the sport type of this Course.
     def sport
-      @sessions[0].sport
+      @sport
     end
 
     # Returns the sport subtype of this Course.
     def sub_sport
-      @sessions[0].sub_sport
+      @sub_sport
     end
 
     # Write the Course data to a file.

@@ -100,8 +100,8 @@ module Fit4Ruby
       @device_infos.each.with_index { |d, index| d.check(index) }
       @sensor_settings.each.with_index { |s, index| s.check(index) }
       unless @num_sessions == @sessions.count
-        Log.fatal "Activity record requires #{@num_sessions}, but "
-                  "#{@sessions.length} session records were found in the "
+        Log.fatal "Activity record requires #{@num_sessions}, but " +
+                  "#{@sessions.length} session records were found in the " + 
                   "FIT file."
       end
 
@@ -162,7 +162,7 @@ module Fit4Ruby
         @heart_rate_zones[index].check(index) if @heart_rate_zones[index]
       end
 
-      @sessions.each { |s| s.check(self) }
+      @sessions.each.with_index { |s, index| s.check(index, self) }
     end
 
     # Convenience method that aggregates all the distances from the included

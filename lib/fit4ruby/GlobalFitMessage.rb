@@ -326,6 +326,7 @@ module Fit4Ruby
     end
 
     def find_by_name(name)
+	  #binding.pry   #jkk
       @messages.values.find { |m| m.name == name }
     end
 

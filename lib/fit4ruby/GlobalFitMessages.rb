@@ -757,6 +757,25 @@ module Fit4Ruby
     field 253, 'uint32', 'undocumented_field_253'
     field 254, 'uint16', 'location_index'
 
+	# Message 31 is a course - if it has time data, should be recorded as activity
+	message 31, 'course'
+	field 4, 'enum', 'sport', :dict => 'sport'
+	field 5, 'string', 'name'
+	field 6, 'enum', 'course_capabilities'
+    field 7, 'sub_sport', 'sub_sport'
+
+	message 32, 'course_point'
+	field 1, 'uint32', 'timestamp', :type => 'date_time'
+	field 2, 'sint32', 'start_position_lat', :type => 'coordinate'
+    field 3, 'sint32', 'start_position_long', :type => 'coordinate'
+    field 4, 'uint32', 'distance', :scale => 100, :unit => 'm'
+    field 5, 'enum', 'course_point'
+	field 6, 'string', 'name'
+	field 7, 'uint16', 'undocumented_field_7'
+    field 8, 'bool', 'favorite'
+    field 254, 'uint16', 'message_index'
+	
+
     message 33, 'totals'
     field 0, 'uint32', 'timer_time', :unit => 's'
     field 1, 'uint32', 'distance', :unit => 'm'

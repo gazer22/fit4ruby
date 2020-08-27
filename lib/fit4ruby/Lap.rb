@@ -55,6 +55,7 @@ module Fit4Ruby
     end
 
     def check(index, activity)
+	#def check(activity)
       unless @message_index == index
         Log.fatal "message_index must be #{index}, not #{@message_index}"
       end

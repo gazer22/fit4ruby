@@ -11,7 +11,7 @@
 #
 
 require 'fit4ruby/FitMessageIdMapper'
-require 'fit4ruby/GlobalFitMessages.rb'
+require 'fit4ruby/GlobalFitMessages'
 
 module Fit4Ruby
 
@@ -28,7 +28,7 @@ module Fit4Ruby
 
     def initialize(record_id)
       @message = GlobalFitMessages.find_by_name(record_id)
-
+	  
       # Create instance variables that correspond to every field of the
       # corresponding FIT data record.
       @message.fields_by_name.each do |name, field|
@@ -150,7 +150,6 @@ module Fit4Ruby
           value = FitDefinitionFieldBase.undefined_value(field.type)
         end
 		if value.is_a?(Array)
-			#binding.pry    #jkk
             value.map do |v|
                 v = FitDefinitionFieldBase.undefined_value(field.type) if v.nil?
             end

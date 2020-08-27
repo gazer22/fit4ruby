@@ -800,6 +800,9 @@ module Fit4Ruby
     entry 0x0FFF, 'mask'
     entry 0x7000, 'reserved'
     entry 0x8000, 'selected'
+	
+	dict 'product'   #jkk
+	entry 0, 'generic'
 
     dict 'pwr_zone_calc'
     entry 0, 'custom'

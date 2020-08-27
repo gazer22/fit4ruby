@@ -11,7 +11,7 @@
 #
 
 require 'fit4ruby/Activity'
-require 'Course'
+require 'fit4ruby/Course'
 require 'fit4ruby/Monitoring_B'
 require 'fit4ruby/GlobalFitMessage'
 require 'fit4ruby/Metrics'
@@ -40,7 +40,7 @@ module Fit4Ruby
     # @return The Ruby object that will hold the content of the FIT file. It's
     # a derivative of FitDataRecord.
     def set_type(type)
-      if @top_level_record
+	  if @top_level_record
         Log.fatal "FIT file type has already been set to " +
                   "#{@top_level_record.class}"
       end
@@ -49,8 +49,8 @@ module Fit4Ruby
         @top_level_record = Activity.new
         @type = 'activity'
 	  when 6, 'course'
-	    @top_level_record = Course.new      #jkk doesn't exist yet
-		@type = 'course'					#jkk doesn't exist yet
+	    @top_level_record = Course.new      
+		@type = 'course'					
       when 32, 'monitoring_b'
         @top_level_record = Monitoring_B.new
         @type = 'monitoring_b'
