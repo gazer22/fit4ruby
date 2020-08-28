@@ -67,6 +67,14 @@ module Fit4Ruby
                     "the FIT file."
         end
       end
+	  
+	  # set session elapsed time to last time - first time
+	  # looks like garmin stops time if it is stopped in the middle
+	  # (i.e., as I've done to repair a tire mid-ride)
+	  if @records.length > 0
+	    duration = @records.last.timestamp - @records.first.timestamp
+	    @total_elapsed_time = duration if duration > @total_elapsed_time
+	  end
     end
 
     # Return true if the session contains geographical location data.
